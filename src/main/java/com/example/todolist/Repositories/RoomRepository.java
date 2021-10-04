@@ -2,6 +2,7 @@ package com.example.todolist.Repositories;
 
 import com.example.todolist.Models.Entities.Room;
 import com.example.todolist.Models.Entities.User;
+import com.example.todolist.Models.Entities.UserRoom;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

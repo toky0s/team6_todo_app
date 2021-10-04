@@ -37,7 +37,7 @@ public class BoardService {
     public List<BoardResponse> getCreatedBoardsByRoomId(Integer roomId){
         CustomUserDetail userDetails = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDetails.getUser();
-        RoomResponse roomResponse = roomService.getRoomsByUser(user).stream()
+        RoomResponse roomResponse = roomService.getRoomsCreatedByUser(user).stream()
                 .filter(r -> roomId.equals(r.getId()))
                 .findAny()
                 .orElse(null);

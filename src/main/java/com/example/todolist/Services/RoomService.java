@@ -4,11 +4,14 @@ import com.example.todolist.Exceptions.RoomNotFoundException;
 import com.example.todolist.Exceptions.UserIsInvalidException;
 import com.example.todolist.Models.Entities.Room;
 import com.example.todolist.Models.Entities.User;
+import com.example.todolist.Models.Entities.UserRoom;
 import com.example.todolist.Models.Requests.Room.RoomDeleteRequest;
 import com.example.todolist.Models.Requests.Room.RoomModifyRequest;
 import com.example.todolist.Models.Requests.Room.RoomRequest;
 import com.example.todolist.Models.Responses.RoomResponse;
+import com.example.todolist.Models.Responses.TotalRoomResponse;
 import com.example.todolist.Repositories.RoomRepository;
+import com.example.todolist.Repositories.UserRoomRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +30,35 @@ public class RoomService {
     @Autowired
     private RoomRepository roomRepository;
 
-    public List<RoomResponse> getRoomsByUser(User user){
-        List<Room> rooms = roomRepository.findRoomsByUser(user);
-        return rooms
-                .stream()
-                .map(room -> mappingResponse(room))
+    @Autowired
+    private UserRoomRepository userRoomRepository;
+
+    public List<RoomResponse> getRoomsCreatedByUser(User user){
+        List<Room> createdRooms = roomRepository.findRoomsByUser(user);
+        return createdRooms.stream()
+                .map(createdRoom -> modelMapper.map(createdRoom, RoomResponse.class))
+                .collect(Collectors.toList());
+    }
+
+    public TotalRoomResponse getRooms(User user){
+        List<Room> createdRooms = roomRepository.findRoomsByUser(user);
+        List<Room> joinedRooms = this.getRoomJoinedByUser(user);
+        List<RoomResponse> createdRoomResponses = createdRooms.stream()
+                .map(createdRoom -> modelMapper.map(createdRoom, RoomResponse.class))
+                .collect(Collectors.toList());
+        List<RoomResponse> joinedRoomResponses = joinedRooms.stream()
+                .map(joinedRoom -> modelMapper.map(joinedRoom, RoomResponse.class))
+                .collect(Collectors.toList());
+
+        TotalRoomResponse totalRoomResponse = new TotalRoomResponse(createdRoomResponses, joinedRoomResponses);
+
+        return totalRoomResponse;
+    }
+
+    public List<Room> getRoomJoinedByUser(User user){
+        List<UserRoom> userRooms = userRoomRepository.findUserRoomByUserId(user.getId());
+        return userRooms.stream()
+                .map(userRoom -> userRoom.getRoom())
                 .collect(Collectors.toList());
     }
 
@@ -42,8 +69,8 @@ public class RoomService {
     public RoomResponse createRoom(RoomRequest roomRequest, User user){
         Room room = modelMapper.map(roomRequest, Room.class);
         room.setUser(user);
-        roomRepository.save(room);
-        return modelMapper.map(roomRequest, RoomResponse.class);
+        Room savedRoom = roomRepository.save(room);
+        return modelMapper.map(savedRoom, RoomResponse.class);
     }
 
     public RoomResponse deleteRoom(RoomDeleteRequest roomDeleteRequest, User user){

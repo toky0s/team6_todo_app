@@ -12,4 +12,7 @@ public class ErrorMessage {
 
     @JsonProperty("message")
     private String message;
+
+    @JsonProperty("status")
+    private Boolean status;
 }

@@ -1,5 +1,6 @@
 package com.example.todolist.Models.Entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;

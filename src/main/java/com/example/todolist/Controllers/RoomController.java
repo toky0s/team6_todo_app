@@ -6,6 +6,7 @@ import com.example.todolist.Models.Requests.Room.RoomDeleteRequest;
 import com.example.todolist.Models.Requests.Room.RoomModifyRequest;
 import com.example.todolist.Models.Requests.Room.RoomRequest;
 import com.example.todolist.Models.Responses.RoomResponse;
+import com.example.todolist.Models.Responses.TotalRoomResponse;
 import com.example.todolist.Services.RoomService;
 import com.example.todolist.Utils.JwtTokenProvider;
 import org.modelmapper.ModelMapper;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class RoomController {
@@ -29,10 +31,10 @@ public class RoomController {
     private ModelMapper modelMapper;
 
     @GetMapping("/rooms")
-    public List<RoomResponse> getCreatedRoomsByUser(){
+    public TotalRoomResponse getCreatedRoomsByUser(){
         CustomUserDetail userDetails = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDetails.getUser();
-        return roomService.getRoomsByUser(user);
+        return roomService.getRooms(user);
     }
 
     @PostMapping("/room")
