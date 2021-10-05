@@ -4,6 +4,7 @@ import com.example.todolist.Exceptions.TodoNotFoundException;
 import com.example.todolist.Models.Entities.Comment;
 import com.example.todolist.Models.Entities.Todo;
 import com.example.todolist.Models.Requests.Comment.CommentDeleteRequest;
+import com.example.todolist.Models.Requests.Comment.CommentRequest;
 import com.example.todolist.Models.Responses.CommentResponse;
 import com.example.todolist.Repositories.CommentRepository;
 import com.example.todolist.Repositories.TodoRepository;
@@ -35,6 +36,12 @@ public class CommentService {
             return comments.stream().map(comment -> modelMapper.map(comment, CommentResponse.class)).collect(Collectors.toList());
         }
         throw new TodoNotFoundException(todoId.toString());
+    }
+
+    public CommentResponse createComment(CommentRequest commentRequest){
+        Comment comment = modelMapper.map(commentRequest, Comment.class);
+        Comment savedComment = commentRepository.save(comment);
+        return modelMapper.map(savedComment, CommentResponse.class);
     }
 
     public CommentResponse deleteComment(CommentDeleteRequest commentDeleteRequest){

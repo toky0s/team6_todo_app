@@ -5,9 +5,6 @@ import lombok.Data;
 
 @Data
 public class TodoRequest {
-    @JsonProperty("id")
-    private Integer id;
-
     @JsonProperty("name")
     private String name;
 
@@ -22,10 +19,4 @@ public class TodoRequest {
 
     @JsonProperty("boardId")
     private Integer boardId;
-
-    @JsonProperty("createUserId")
-    private Integer createUserId;
-
-    @JsonProperty("modifyUserId")
-    private Integer modifyUserId;
 }

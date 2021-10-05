@@ -8,8 +8,13 @@ import com.example.todolist.Models.Entities.UserRoom;
 import com.example.todolist.Models.Requests.Room.RoomDeleteRequest;
 import com.example.todolist.Models.Requests.Room.RoomModifyRequest;
 import com.example.todolist.Models.Requests.Room.RoomRequest;
-import com.example.todolist.Models.Responses.RoomResponse;
-import com.example.todolist.Models.Responses.TotalRoomResponse;
+import com.example.todolist.Models.Responses.Board.BoardResponse;
+import com.example.todolist.Models.Responses.Board.TotalBoardItemResponse;
+import com.example.todolist.Models.Responses.Room.RoomResponse;
+import com.example.todolist.Models.Responses.Room.TotalRoomTableResponse;
+import com.example.todolist.Models.Responses.TodoResponse;
+import com.example.todolist.Models.Responses.Room.TotalRoomResponse;
+import com.example.todolist.Models.Responses.UserResponse;
 import com.example.todolist.Repositories.RoomRepository;
 import com.example.todolist.Repositories.UserRoomRepository;
 import org.modelmapper.ModelMapper;
@@ -26,6 +31,18 @@ public class RoomService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private RoomService roomService;
+
+    @Autowired
+    private UserRoomService userRoomService;
+
+    @Autowired
+    private BoardService boardService;
+
+    @Autowired
+    private TodoService todoService;
 
     @Autowired
     private RoomRepository roomRepository;
@@ -107,5 +124,34 @@ public class RoomService {
         else {
             throw new RoomNotFoundException(roomId.toString());
         }
+    }
+
+    public Optional<Room> getRoomById(Integer roomId) {
+        return roomRepository.findById(roomId);
+    }
+
+    public TotalRoomTableResponse getTotalRoomTableResponse(Integer roomId) {
+        Optional<Room> optionalRoom = getRoomById(roomId);
+        if (optionalRoom.isPresent()){
+            Room room =  optionalRoom.get();
+            RoomResponse roomResponse = modelMapper.map(room, RoomResponse.class);
+            List<UserResponse> userResponses = userRoomService.getUsersJoinedRoom(room);
+            List<BoardResponse> boards = boardService.getCreatedBoardsByRoomId(roomId);
+
+            List<TotalBoardItemResponse> totalBoardItemResponses = boards.stream()
+                    .map(board -> totalBoardItemResponseMapper(board))
+                    .collect(Collectors.toList());
+            return new TotalRoomTableResponse(roomResponse, userResponses, totalBoardItemResponses);
+        }
+        else {
+            throw new RoomNotFoundException(roomId.toString());
+        }
+    }
+
+    public TotalBoardItemResponse totalBoardItemResponseMapper(BoardResponse board) {
+        Integer id = board.getId();
+        String name = board.getName();
+        List<TodoResponse> todoResponses = todoService.getCreatedTodosByBoardId(board.getId());
+        return new TotalBoardItemResponse(id, name, todoResponses);
     }
 }

@@ -5,16 +5,14 @@ import com.example.todolist.Models.Entities.User;
 import com.example.todolist.Models.Requests.Room.RoomDeleteRequest;
 import com.example.todolist.Models.Requests.Room.RoomModifyRequest;
 import com.example.todolist.Models.Requests.Room.RoomRequest;
-import com.example.todolist.Models.Responses.RoomResponse;
-import com.example.todolist.Models.Responses.TotalRoomResponse;
+import com.example.todolist.Models.Responses.Room.RoomResponse;
+import com.example.todolist.Models.Responses.Room.TotalRoomResponse;
 import com.example.todolist.Services.RoomService;
 import com.example.todolist.Utils.JwtTokenProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController

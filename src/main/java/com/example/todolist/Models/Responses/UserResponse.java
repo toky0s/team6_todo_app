@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 public class UserResponse {
+    @JsonProperty("id")
+    private Integer id;
 
     @JsonProperty("username")
     private String name;

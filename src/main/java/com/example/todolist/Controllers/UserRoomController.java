@@ -1,9 +1,15 @@
 package com.example.todolist.Controllers;
 
+import com.example.todolist.Models.Entities.CustomUserDetail;
+import com.example.todolist.Models.Entities.User;
 import com.example.todolist.Models.Requests.UserRoom.JoinedRoomRequest;
-import com.example.todolist.Models.Requests.UserRoom.JoinedRoomResponse;
+import com.example.todolist.Models.Requests.UserRoom.LeaveRoomRequest;
+import com.example.todolist.Models.Responses.JoinedRoomResponse;
+import com.example.todolist.Models.Responses.LeaveRoomResponse;
 import com.example.todolist.Services.UserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -17,5 +23,10 @@ public class UserRoomController {
     @PostMapping("/user-room")
     public JoinedRoomResponse joinARoom(@RequestBody JoinedRoomRequest joinedRoomRequest){
         return userRoomService.joinARoom(joinedRoomRequest);
+    }
+
+    @DeleteMapping("user-room/leave")
+    public LeaveRoomResponse leaveRoom(@RequestBody LeaveRoomRequest leaveRoomRequest){
+        return userRoomService.leaveRoom(leaveRoomRequest);
     }
 }

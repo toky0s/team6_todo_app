@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface UserRoomRepository extends CrudRepository<UserRoom, Integer> {
     List<UserRoom> findUserRoomByUserId(Integer userId);
 
+    List<UserRoom> findUserRoomByRoomId(Integer roomId);
+
     Optional<UserRoom> findUserRoomByUserIdAndRoomId(Integer userId, Integer roomId);
 }

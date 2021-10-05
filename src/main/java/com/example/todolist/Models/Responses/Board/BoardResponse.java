@@ -1,22 +1,16 @@
-package com.example.todolist.Models.Responses;
+package com.example.todolist.Models.Responses.Board;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class RoomResponse {
-
+public class BoardResponse {
     @JsonProperty("id")
     private Integer id;
 
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("password")
-    private String password;
-
-    @JsonProperty("userId")
+    @JsonProperty("user-id")
     private Integer userId;
 }

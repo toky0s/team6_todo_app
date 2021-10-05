@@ -8,9 +8,10 @@ import com.example.todolist.Models.Entities.Room;
 import com.example.todolist.Models.Entities.User;
 import com.example.todolist.Models.Entities.UserRoom;
 import com.example.todolist.Models.Requests.UserRoom.JoinedRoomRequest;
-import com.example.todolist.Models.Requests.UserRoom.JoinedRoomResponse;
+import com.example.todolist.Models.Responses.JoinedRoomResponse;
 import com.example.todolist.Models.Requests.UserRoom.LeaveRoomRequest;
 import com.example.todolist.Models.Responses.LeaveRoomResponse;
+import com.example.todolist.Models.Responses.UserResponse;
 import com.example.todolist.Repositories.RoomRepository;
 import com.example.todolist.Repositories.UserRoomRepository;
 import org.modelmapper.ModelMapper;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.DoubleToIntFunction;
+import java.util.stream.Collectors;
 
 @Service
 public class UserRoomService {
@@ -29,6 +30,9 @@ public class UserRoomService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -44,14 +48,13 @@ public class UserRoomService {
         Optional<Room> optionalRoom = roomRepository.findById(joinedRoomRequest.getRoomId());
         if (optionalRoom.isPresent()){
             Room room = optionalRoom.get();
-            System.out.println(room.getPassword());
             if (joinedRoomRequest.getPassword().equals(room.getPassword())){
                 UserRoom newUserRoom = modelMapper.map(joinedRoomRequest, UserRoom.class);
                 newUserRoom.setUser(user);
                 userRoomRepository.save(newUserRoom);
-
                 JoinedRoomResponse joinedRoomResponse = new JoinedRoomResponse();
                 joinedRoomResponse.setRoomId(joinedRoomRequest.getRoomId());
+                joinedRoomResponse.setName(room.getName());
                 joinedRoomResponse.setStatus(true);
                 return joinedRoomResponse;
             }
@@ -80,5 +83,13 @@ public class UserRoomService {
             }
         }
         throw new RoomNotFoundException(leaveRoomRequest.getId().toString());
+    }
+
+    public List<UserResponse> getUsersJoinedRoom(Room room) {
+        List<UserRoom> userRooms = userRoomRepository.findUserRoomByRoomId(room.getId());
+        List<UserResponse> users = userRooms.stream()
+                .map(userRoom -> userService.getUserById(userRoom.getId()))
+                .collect(Collectors.toList());
+        return users;
     }
 }

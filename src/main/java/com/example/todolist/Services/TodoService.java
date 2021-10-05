@@ -47,6 +47,10 @@ public class TodoService {
         Optional<Board> board = boardRepository.findById(todoRequest.getBoardId());
         if (board.isPresent()){
             Todo todo = modelMapper.map(todoRequest, Todo.class);
+            CustomUserDetail customUserDetail = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = customUserDetail.getUser();
+            todo.setCreateUser(user);
+            todo.setModifyUser(user);
             todoRepository.save(todo);
             return modelMapper.map(todo, TodoResponse.class);
         }

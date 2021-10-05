@@ -8,5 +8,5 @@ public class BoardRequest {
     @JsonProperty("name")
     private String name;
     @JsonProperty("room-id")
-    private String roomId;
+    private Integer roomId;
 }

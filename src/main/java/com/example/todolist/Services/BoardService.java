@@ -9,14 +9,15 @@ import com.example.todolist.Models.Entities.User;
 import com.example.todolist.Models.Requests.Board.BoardDeleteRequest;
 import com.example.todolist.Models.Requests.Board.BoardModifyRequest;
 import com.example.todolist.Models.Requests.Board.BoardRequest;
-import com.example.todolist.Models.Responses.BoardResponse;
-import com.example.todolist.Models.Responses.RoomResponse;
+import com.example.todolist.Models.Responses.Board.BoardResponse;
+import com.example.todolist.Models.Responses.Room.RoomResponse;
 import com.example.todolist.Repositories.BoardRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +28,12 @@ import java.util.stream.Collectors;
 public class BoardService {
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private UserRoomService userRoomService;
+
+    @Autowired
+    private TodoService todoService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -48,8 +55,11 @@ public class BoardService {
     public BoardResponse createNewBoard(BoardRequest boardRequest) {
         CustomUserDetail userDetails = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDetails.getUser();
-        Board board = modelMapper.map(boardRequest, Board.class);
+        Optional<Room> optionalRoom = roomService.getRoomById(boardRequest.getRoomId());
+        Board board = new Board();
         board.setUser(user);
+        board.setName(boardRequest.getName());
+        board.setRoom(optionalRoom.get());
         Board board1 = boardRepository.save(board);
         return modelMapper.map(board1, BoardResponse.class);
     }

@@ -73,4 +73,13 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(userName);
         }
     }
+
+    public UserResponse getUserById(Integer userId){
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            return modelMapper.map(user, UserResponse.class);
+        }
+        throw new UsernameNotFoundException(userId.toString());
+    }
 }

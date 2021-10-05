@@ -1,5 +1,6 @@
-package com.example.todolist.Models.Responses;
+package com.example.todolist.Models.Responses.Room;
 
+import com.example.todolist.Models.Responses.Room.RoomResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
