@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class RoomDeleteRequest {
-    @JsonProperty("room-id")
+    @JsonProperty("id")
     private int id;
 }
