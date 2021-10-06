@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.DoubleToIntFunction;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,10 +93,11 @@ public class RoomService {
 
     public RoomResponse deleteRoom(RoomDeleteRequest roomDeleteRequest, User user){
         Integer roomId = roomDeleteRequest.getId();
+        System.out.println(roomId);
         Optional<Room> room = roomRepository.findById(roomId);
         if (room.isPresent()){
             if (Objects.equals(room.get().getUser().getId(), user.getId())){
-                roomRepository.delete(room.get());
+                roomRepository.deleteRoomById(room.get().getId());
                 return modelMapper.map(room.get(), RoomResponse.class);
             }
             else{

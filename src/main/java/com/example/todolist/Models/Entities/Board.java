@@ -3,6 +3,7 @@ package com.example.todolist.Models.Entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,6 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "board")
     private Set<Todo> todos;
 }

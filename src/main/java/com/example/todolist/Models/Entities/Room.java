@@ -3,6 +3,7 @@ package com.example.todolist.Models.Entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,10 +22,10 @@ public class Room {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "room")
     private Set<Board> boards;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "room")
     private Set<UserRoom> userRooms;
 
     @ManyToOne

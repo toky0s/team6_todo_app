@@ -18,10 +18,11 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "todo_id", nullable = false)
+    @JoinColumn(name = "todo_id")
     private Todo todo;
 }

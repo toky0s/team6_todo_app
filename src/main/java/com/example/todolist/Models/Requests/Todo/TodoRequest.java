@@ -15,7 +15,7 @@ public class TodoRequest {
     private String publicDate;
 
     @JsonProperty("status")
-    private Integer status;
+    private Boolean status;
 
     @JsonProperty("boardId")
     private Integer boardId;

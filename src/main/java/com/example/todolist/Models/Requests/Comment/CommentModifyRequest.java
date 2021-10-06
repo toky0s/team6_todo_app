@@ -8,7 +8,7 @@ public class CommentModifyRequest {
     @JsonProperty("id")
     private Integer id;
 
-    @JsonProperty("")
+    @JsonProperty("content")
     private String content;
 
 }

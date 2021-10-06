@@ -19,17 +19,20 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "user")
     private Set<Room> rooms;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "user")
     private Set<Board> boards;
 
-    @OneToMany(mappedBy = "createUser")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "createUser")
     private Set<Todo> createdTodos;
 
-    @OneToMany(mappedBy = "modifyUser")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "modifyUser")
     private Set<Todo> modifiedTodos;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
+    private Set<Comment> comments;
 
     @OneToMany(mappedBy = "user")
     private Set<UserRoom> userRooms;

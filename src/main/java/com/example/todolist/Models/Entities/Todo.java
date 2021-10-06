@@ -1,6 +1,7 @@
 package com.example.todolist.Models.Entities;
 import lombok.Data;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,9 +23,9 @@ public class Todo {
     private String publicDate;
 
     @Column(name = "status")
-    private Integer status;
+    private Boolean status;
 
-    @OneToMany(mappedBy = "todo")
+    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "todo")
     private Set<Comment> comments;
 
     @ManyToOne
