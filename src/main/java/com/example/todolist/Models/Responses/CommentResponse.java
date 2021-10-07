@@ -16,4 +16,7 @@ public class CommentResponse {
 
     @JsonProperty("todo-id")
     private Integer todoId;
+
+    @JsonProperty("username")
+    private String username;
 }
