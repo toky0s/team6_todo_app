@@ -88,7 +88,7 @@ public class UserRoomService {
     public List<UserResponse> getUsersJoinedRoom(Room room) {
         List<UserRoom> userRooms = userRoomRepository.findUserRoomByRoomId(room.getId());
         List<UserResponse> users = userRooms.stream()
-                .map(userRoom -> userService.getUserById(userRoom.getId()))
+                .map(userRoom -> userService.getUserResponseById(userRoom.getId()))
                 .collect(Collectors.toList());
         return users;
     }

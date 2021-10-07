@@ -2,15 +2,13 @@ package com.example.todolist.Services;
 
 import com.example.todolist.Exceptions.BoardNotFoundException;
 import com.example.todolist.Exceptions.UserIsInvalidException;
-import com.example.todolist.Models.Entities.Board;
-import com.example.todolist.Models.Entities.CustomUserDetail;
-import com.example.todolist.Models.Entities.Room;
-import com.example.todolist.Models.Entities.User;
+import com.example.todolist.Models.Entities.*;
 import com.example.todolist.Models.Requests.Board.BoardDeleteRequest;
 import com.example.todolist.Models.Requests.Board.BoardModifyRequest;
 import com.example.todolist.Models.Requests.Board.BoardRequest;
 import com.example.todolist.Models.Responses.Board.BoardResponse;
 import com.example.todolist.Models.Responses.Room.RoomResponse;
+import com.example.todolist.Models.Responses.UserResponse;
 import com.example.todolist.Repositories.BoardRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,9 @@ public class BoardService {
 
     @Autowired
     private TodoService todoService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -80,21 +81,14 @@ public class BoardService {
         else {
             throw new BoardNotFoundException(boardDeleteRequest.getId().toString());
         }
-
     }
 
     public BoardResponse modifyBoard(BoardModifyRequest boardModifyRequest) {
-        CustomUserDetail userDetails = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDetails.getUser();
-        Set<Room> roomSet = user.getRooms();
         Optional<Board> board = boardRepository.findById(boardModifyRequest.getId());
         if (board.isPresent()) {
-            Room boardRoom =  board.get().getRoom();
-            if (roomSet.contains(boardRoom)){
                 Board newBoard = modelMapper.map(boardModifyRequest, Board.class);
                 boardRepository.save(newBoard);
                 return modelMapper.map(boardRepository.findById(boardModifyRequest.getId()).get(), BoardResponse.class);
-            }
         }
         throw new BoardNotFoundException(boardModifyRequest.getId().toString());
     }

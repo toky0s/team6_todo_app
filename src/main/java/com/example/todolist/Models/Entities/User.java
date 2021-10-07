@@ -19,7 +19,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "user")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private Set<Room> rooms;
 
     @OneToMany(cascade = CascadeType.PERSIST , mappedBy = "user")
