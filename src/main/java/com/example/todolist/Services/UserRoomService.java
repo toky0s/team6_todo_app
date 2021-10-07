@@ -3,6 +3,7 @@ package com.example.todolist.Services;
 import com.example.todolist.Exceptions.PasswordInvalidException;
 import com.example.todolist.Exceptions.RoomNotFoundException;
 import com.example.todolist.Exceptions.UserRoomReallyExistException;
+import com.example.todolist.Exceptions.YouAreRootException;
 import com.example.todolist.Models.Entities.CustomUserDetail;
 import com.example.todolist.Models.Entities.Room;
 import com.example.todolist.Models.Entities.User;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.awt.desktop.SystemSleepEvent;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +38,9 @@ public class UserRoomService {
     private UserService userService;
 
     @Autowired
+    private RoomService roomService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     public JoinedRoomResponse joinARoom(JoinedRoomRequest joinedRoomRequest){
@@ -46,7 +51,16 @@ public class UserRoomService {
             throw new UserRoomReallyExistException(userRoom.get().getRoom().getName());
         }
 
-        Optional<Room> optionalRoom = roomRepository.findById(joinedRoomRequest.getRoomId());
+        Set<Room> createdByUserRooms = user.getRooms();
+        Optional<Room> optionalRoom = roomService.getRoomById(joinedRoomRequest.getRoomId());
+        if(optionalRoom.isPresent()){
+            Room room = optionalRoom.get();
+            Boolean isCreatedByUser = createdByUserRooms.contains(room);
+            if (isCreatedByUser){
+                throw new YouAreRootException(room.getId().toString());
+            }
+        }
+
         if (optionalRoom.isPresent()){
             Room room = optionalRoom.get();
             if (joinedRoomRequest.getPassword().equals(room.getPassword())){

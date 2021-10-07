@@ -53,4 +53,10 @@ public class ApiExceptionHandler {
     public ErrorMessage RoomNotFoundException(Exception ex, WebRequest request){
         return new ErrorMessage(50404, "Room không tồn tại", false);
     }
+
+    @ExceptionHandler(YouAreRootException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorMessage YouAreRootException(Exception ex, WebRequest request){
+        return new ErrorMessage(50409, "Bạn đã là chủ phòng", false);
+    }
 }
