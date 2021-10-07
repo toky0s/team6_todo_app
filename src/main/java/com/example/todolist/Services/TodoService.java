@@ -39,8 +39,23 @@ public class TodoService {
     public List<TodoResponse> getCreatedTodosByBoardId(Integer boardId){
         List<Todo> todos = todoRepository.findTodosByBoard_Id(boardId);
         return todos.stream()
-                .map(todo -> modelMapper.map(todo, TodoResponse.class))
+                .map(todo -> todoMapper(todo))
                 .collect(Collectors.toList());
+    }
+
+    private TodoResponse todoMapper(Todo todo){
+        TodoResponse todoResponse = new TodoResponse();
+        todoResponse.setId(todo.getId());
+        todoResponse.setName(todo.getName());
+        todoResponse.setDetail(todo.getDetail());
+        todoResponse.setStatus(todo.getStatus());
+        todoResponse.setPublicDate(todo.getPublicDate());
+        todoResponse.setBoardId(todo.getBoard().getId());
+        todoResponse.setCreateUserId(todo.getCreateUser().getId());
+        todoResponse.setModifyUserId(todo.getModifyUser().getId());
+        todoResponse.setCreatedUsername(todo.getCreateUser().getName());
+        todoResponse.setModifiedUsername(todo.getModifyUser().getName());
+        return todoResponse;
     }
 
     public TodoResponse createNewTodo(TodoRequest todoRequest){
@@ -52,7 +67,7 @@ public class TodoService {
             todo.setCreateUser(user);
             todo.setModifyUser(user);
             todoRepository.save(todo);
-            return modelMapper.map(todo, TodoResponse.class);
+            return todoMapper(todo);
         }
         throw new BoardNotFoundException(todoRequest.getBoardId().toString());
     }
@@ -61,7 +76,7 @@ public class TodoService {
         Optional<Todo> todo = todoRepository.findById(todoId);
         if (todo.isPresent()){
             todoRepository.deleteById(todoId);
-            return modelMapper.map(todo, TodoResponse.class);
+            return todoMapper(todo.get());
         }
         else{
             throw new TodoNotFoundException(todoId.toString());
@@ -77,7 +92,7 @@ public class TodoService {
             User modifyUser = userDetails.getUser();
             newTodo.setModifyUser(modifyUser);
             todoRepository.save(newTodo);
-            return modelMapper.map(newTodo, TodoResponse.class);
+            return todoMapper(newTodo);
         }
         else {
             throw new TodoNotFoundException(todoRequestId.toString());

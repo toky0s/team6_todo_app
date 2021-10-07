@@ -8,7 +8,7 @@ public class TodoResponse {
     @JsonProperty("id")
     private Integer id;
 
-    @JsonProperty("name")
+    @JsonProperty("title")
     private String name;
 
     @JsonProperty("detail")
@@ -18,7 +18,7 @@ public class TodoResponse {
     private String publicDate;
 
     @JsonProperty("status")
-    private Integer status;
+    private Boolean status;
 
     @JsonProperty("boardId")
     private Integer boardId;
@@ -28,4 +28,10 @@ public class TodoResponse {
 
     @JsonProperty("modifyUserId")
     private Integer modifyUserId;
+
+    @JsonProperty("createdUsername")
+    private String createdUsername;
+
+    @JsonProperty("modifiedUsername")
+    private String modifiedUsername;
 }

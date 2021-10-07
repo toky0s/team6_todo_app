@@ -1,6 +1,7 @@
 package com.example.todolist.Services;
 
 import com.example.todolist.Exceptions.BoardNotFoundException;
+import com.example.todolist.Exceptions.RoomNotFoundException;
 import com.example.todolist.Exceptions.UserIsInvalidException;
 import com.example.todolist.Models.Entities.*;
 import com.example.todolist.Models.Requests.Board.BoardDeleteRequest;
@@ -43,14 +44,15 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     public List<BoardResponse> getCreatedBoardsByRoomId(Integer roomId){
-        CustomUserDetail userDetails = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDetails.getUser();
-        RoomResponse roomResponse = roomService.getRoomsCreatedByUser(user).stream()
-                .filter(r -> roomId.equals(r.getId()))
-                .findAny()
-                .orElse(null);
-        List<Board> boards = boardRepository.findBoardsByRoom_Id(roomResponse.getId());
-        return boards.stream().map(board -> modelMapper.map(board, BoardResponse.class)).collect(Collectors.toList());
+        Optional<Room> optionalRoom = roomService.getRoomById(roomId);
+        if (optionalRoom.isPresent()){
+            Room room = optionalRoom.get();
+            List<Board> boards = boardRepository.findBoardsByRoom_Id(room.getId());
+            return boards.stream().map(board -> modelMapper.map(board, BoardResponse.class)).collect(Collectors.toList());
+        }
+        else {
+            throw new RoomNotFoundException(roomId.toString());
+        }
     }
 
     public BoardResponse createNewBoard(BoardRequest boardRequest) {
