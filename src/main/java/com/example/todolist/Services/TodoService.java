@@ -102,6 +102,9 @@ public class TodoService {
             CustomUserDetail userDetails = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User modifyUser = userDetails.getUser();
             newTodo.setModifyUser(modifyUser);
+            newTodo.setPublicDate(todo.get().getPublicDate());
+            newTodo.setBoard(todo.get().getBoard());
+            newTodo.setCreateUser(todo.get().getCreateUser());
             todoRepository.save(newTodo);
             return todoMapper(newTodo);
         }
