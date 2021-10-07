@@ -86,11 +86,14 @@ public class BoardService {
     }
 
     public BoardResponse modifyBoard(BoardModifyRequest boardModifyRequest) {
-        Optional<Board> board = boardRepository.findById(boardModifyRequest.getId());
-        if (board.isPresent()) {
-                Board newBoard = modelMapper.map(boardModifyRequest, Board.class);
-                boardRepository.save(newBoard);
-                return modelMapper.map(boardRepository.findById(boardModifyRequest.getId()).get(), BoardResponse.class);
+        Optional<Board> optionalBoard = boardRepository.findById(boardModifyRequest.getId());
+        if (optionalBoard.isPresent()) {
+            Board board = optionalBoard.get();
+            Board newBoard = modelMapper.map(boardModifyRequest, Board.class);
+            newBoard.setUser(board.getUser());
+            newBoard.setRoom(board.getRoom());
+            boardRepository.save(newBoard);
+            return modelMapper.map(boardRepository.findById(boardModifyRequest.getId()).get(), BoardResponse.class);
         }
         throw new BoardNotFoundException(boardModifyRequest.getId().toString());
     }
