@@ -58,10 +58,19 @@ public class TodoService {
         return todoResponse;
     }
 
+    private Todo todoRequest2Todo(TodoRequest todoRequest){
+        Todo todo = new Todo();
+        todo.setName(todoRequest.getName());
+        todo.setDetail(todoRequest.getDetail());
+        todo.setStatus(todoRequest.getStatus());
+        todo.setPublicDate(todoRequest.getPublicDate());
+        return todo;
+    }
+
     public TodoResponse createNewTodo(TodoRequest todoRequest){
         Optional<Board> board = boardRepository.findById(todoRequest.getBoardId());
         if (board.isPresent()){
-            Todo todo = modelMapper.map(todoRequest, Todo.class);
+            Todo todo = todoRequest2Todo(todoRequest);
             CustomUserDetail customUserDetail = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User user = customUserDetail.getUser();
             todo.setCreateUser(user);
