@@ -5,6 +5,7 @@ import com.example.todolist.Models.Requests.Todo.TodoModifyRequest;
 import com.example.todolist.Models.Requests.Todo.TodoRequest;
 import com.example.todolist.Models.Responses.TodoResponse;
 import com.example.todolist.Services.TodoService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class TodoController {
 
     @Autowired

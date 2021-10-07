@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.awt.desktop.SystemSleepEvent;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,7 +89,7 @@ public class UserRoomService {
     public List<UserResponse> getUsersJoinedRoom(Room room) {
         List<UserRoom> userRooms = userRoomRepository.findUserRoomByRoomId(room.getId());
         List<UserResponse> users = userRooms.stream()
-                .map(userRoom -> userService.getUserResponseById(userRoom.getId()))
+                .map(userRoom -> userService.getUserResponseById(userRoom.getUser().getId()))
                 .collect(Collectors.toList());
         return users;
     }

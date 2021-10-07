@@ -7,6 +7,7 @@ import com.example.todolist.Models.Responses.Board.BoardResponse;
 import com.example.todolist.Models.Responses.Room.TotalRoomTableResponse;
 import com.example.todolist.Services.BoardService;
 import com.example.todolist.Services.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class BoardController {
     @Autowired
     private BoardService boardService;

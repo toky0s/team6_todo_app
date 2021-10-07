@@ -7,6 +7,7 @@ import com.example.todolist.Models.Responses.TodoResponse;
 import com.example.todolist.Repositories.CommentRepository;
 import com.example.todolist.Services.CommentService;
 import com.example.todolist.Services.TodoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class CommentController {
 
     @Autowired

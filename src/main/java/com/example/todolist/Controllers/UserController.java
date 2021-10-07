@@ -7,6 +7,7 @@ import com.example.todolist.Models.Responses.LoginResponse;
 import com.example.todolist.Models.Responses.UserResponse;
 import com.example.todolist.Services.UserService;
 import com.example.todolist.Utils.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
