@@ -61,6 +61,8 @@ public class TodoService {
     private Todo todoRequest2Todo(TodoRequest todoRequest){
         Todo todo = new Todo();
         todo.setName(todoRequest.getName());
+        Optional<Board> optionalBoard = boardRepository.findById(todoRequest.getBoardId());
+        todo.setBoard(optionalBoard.get());
         todo.setDetail(todoRequest.getDetail());
         todo.setStatus(todoRequest.getStatus());
         todo.setPublicDate(todoRequest.getPublicDate());
