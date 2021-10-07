@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class TodoRequest {
-    @JsonProperty("name")
+    @JsonProperty("title")
     private String name;
 
     @JsonProperty("detail")

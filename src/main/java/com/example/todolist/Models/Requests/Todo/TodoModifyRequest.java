@@ -8,7 +8,7 @@ public class TodoModifyRequest {
     @JsonProperty("id")
     private Integer id;
 
-    @JsonProperty("name")
+    @JsonProperty("title")
     private String name;
 
     @JsonProperty("detail")
