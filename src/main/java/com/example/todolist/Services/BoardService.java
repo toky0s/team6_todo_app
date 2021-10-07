@@ -70,15 +70,8 @@ public class BoardService {
     public BoardResponse deleteBoard(BoardDeleteRequest boardDeleteRequest){
         Optional<Board> board = boardRepository.findById(boardDeleteRequest.getId());
         if (board.isPresent()) {
-            CustomUserDetail userDetails = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User user = userDetails.getUser();
-            if (Objects.equals(user.getId(), board.get().getUser().getId())){
-                boardRepository.delete(board.get());
-                return modelMapper.map(board.get(), BoardResponse.class);
-            }
-            else {
-                throw new UserIsInvalidException(user.getName());
-            }
+            boardRepository.delete(board.get());
+            return modelMapper.map(board.get(), BoardResponse.class);
         }
         else {
             throw new BoardNotFoundException(boardDeleteRequest.getId().toString());
