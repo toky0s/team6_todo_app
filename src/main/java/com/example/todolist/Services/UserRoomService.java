@@ -12,9 +12,11 @@ import com.example.todolist.Models.Requests.UserRoom.JoinedRoomRequest;
 import com.example.todolist.Models.Responses.JoinedRoomResponse;
 import com.example.todolist.Models.Requests.UserRoom.LeaveRoomRequest;
 import com.example.todolist.Models.Responses.LeaveRoomResponse;
+import com.example.todolist.Models.Responses.Room.RoomResponse;
 import com.example.todolist.Models.Responses.UserResponse;
 import com.example.todolist.Repositories.RoomRepository;
 import com.example.todolist.Repositories.UserRoomRepository;
+import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,11 +53,12 @@ public class UserRoomService {
             throw new UserRoomReallyExistException(userRoom.get().getRoom().getName());
         }
 
-        Set<Room> createdByUserRooms = user.getRooms();
+        List<RoomResponse> createdByUserRooms = roomService.getRoomsCreatedByUser(user);
+        List<Integer> createdByUserRoomIds = createdByUserRooms.stream().map(roomResponse -> roomResponse.getId()).collect(Collectors.toList());
         Optional<Room> optionalRoom = roomService.getRoomById(joinedRoomRequest.getRoomId());
         if(optionalRoom.isPresent()){
             Room room = optionalRoom.get();
-            Boolean isCreatedByUser = createdByUserRooms.contains(room);
+            Boolean isCreatedByUser = createdByUserRoomIds.contains(room.getId());
             if (isCreatedByUser){
                 throw new YouAreRootException(room.getId().toString());
             }
