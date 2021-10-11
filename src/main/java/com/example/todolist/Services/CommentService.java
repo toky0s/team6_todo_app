@@ -37,7 +37,7 @@ public class CommentService {
         if (todoOptional.isPresent()){
             Todo todo = todoOptional.get();
             List<Comment> comments = commentRepository.findCommentsByTodo(todo);
-            return comments.stream().map(comment -> modelMapper.map(comment, CommentResponse.class)).collect(Collectors.toList());
+            return comments.stream().map(comment -> commentMapper(comment)).collect(Collectors.toList());
         }
         throw new TodoNotFoundException(todoId.toString());
     }
@@ -72,5 +72,15 @@ public class CommentService {
         else {
             throw new CommentNotFoundException(commentDeleteRequest.getId().toString());
         }
+    }
+
+    private CommentResponse commentMapper(Comment comment){
+        CommentResponse commentResponse = new CommentResponse();
+        commentResponse.setContent(comment.getContent());
+        commentResponse.setId(comment.getId());
+        commentResponse.setUsername(comment.getUser().getName());
+        commentResponse.setTodoId(comment.getTodo().getId());
+        commentResponse.setUserId(comment.getUser().getId());
+        return commentResponse;
     }
 }
