@@ -3,8 +3,10 @@ package com.example.todolist.Controllers;
 import com.example.todolist.Models.Entities.CustomUserDetail;
 import com.example.todolist.Models.Entities.User;
 import com.example.todolist.Models.Requests.UserRoom.JoinedRoomRequest;
+import com.example.todolist.Models.Requests.UserRoom.KickRoomRequest;
 import com.example.todolist.Models.Requests.UserRoom.LeaveRoomRequest;
 import com.example.todolist.Models.Responses.JoinedRoomResponse;
+import com.example.todolist.Models.Responses.KickRoomResponse;
 import com.example.todolist.Models.Responses.LeaveRoomResponse;
 import com.example.todolist.Services.UserRoomService;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +29,13 @@ public class UserRoomController {
         return userRoomService.joinARoom(joinedRoomRequest);
     }
 
-    @DeleteMapping("user-room/leave")
+    @DeleteMapping("/user-room/leave")
     public LeaveRoomResponse leaveRoom(@RequestBody LeaveRoomRequest leaveRoomRequest){
         return userRoomService.leaveRoom(leaveRoomRequest);
+    }
+
+    @DeleteMapping("/user-room/kick")
+    public KickRoomResponse kickFromRoom(@RequestBody KickRoomRequest kickRoomRequest){
+        return userRoomService.kick(kickRoomRequest.getUserId(), kickRoomRequest.getRoomId());
     }
 }

@@ -101,7 +101,7 @@ public class RoomService {
                 return modelMapper.map(room.get(), RoomResponse.class);
             }
             else{
-                throw new UserIsInvalidException(user.getName());
+                throw new UserIsInvalidException(user.getId());
             }
         }
         else {
@@ -120,7 +120,7 @@ public class RoomService {
                 return modelMapper.map(newRoom, RoomResponse.class);
             }
             else{
-                throw new UserIsInvalidException(user.getName());
+                throw new UserIsInvalidException(user.getId());
             }
         }
         else {

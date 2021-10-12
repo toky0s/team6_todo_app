@@ -59,4 +59,10 @@ public class ApiExceptionHandler {
     public ErrorMessage YouAreRootException(Exception ex, WebRequest request){
         return new ErrorMessage(50409, "Bạn đã là chủ phòng", false);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ErrorMessage UserNotFoundExcepError(Exception ex, WebRequest request){
+        return new ErrorMessage(10404, "User ko ton tai", false);
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.todolist.Exceptions;
 
 public class UserIsInvalidException extends RuntimeException {
-    public UserIsInvalidException(String username){
-        super(username);
+    public UserIsInvalidException(Integer userId){
+        super(userId.toString());
     }
 }

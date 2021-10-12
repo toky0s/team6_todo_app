@@ -1,25 +1,21 @@
 package com.example.todolist.Services;
 
-import com.example.todolist.Exceptions.PasswordInvalidException;
-import com.example.todolist.Exceptions.RoomNotFoundException;
-import com.example.todolist.Exceptions.UserRoomReallyExistException;
-import com.example.todolist.Exceptions.YouAreRootException;
+import com.example.todolist.Exceptions.*;
 import com.example.todolist.Models.Entities.CustomUserDetail;
 import com.example.todolist.Models.Entities.Room;
 import com.example.todolist.Models.Entities.User;
 import com.example.todolist.Models.Entities.UserRoom;
 import com.example.todolist.Models.Requests.UserRoom.JoinedRoomRequest;
-import com.example.todolist.Models.Responses.JoinedRoomResponse;
+import com.example.todolist.Models.Responses.*;
 import com.example.todolist.Models.Requests.UserRoom.LeaveRoomRequest;
-import com.example.todolist.Models.Responses.LeaveRoomResponse;
 import com.example.todolist.Models.Responses.Room.RoomResponse;
-import com.example.todolist.Models.Responses.UserResponse;
 import com.example.todolist.Repositories.RoomRepository;
 import com.example.todolist.Repositories.UserRoomRepository;
 import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.awt.desktop.SystemSleepEvent;
@@ -30,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserRoomService {
+
     @Autowired
     private UserRoomRepository userRoomRepository;
 
@@ -109,5 +106,34 @@ public class UserRoomService {
                 .map(userRoom -> userService.getUserResponseById(userRoom.getUser().getId()))
                 .collect(Collectors.toList());
         return users;
+    }
+
+    public KickRoomResponse kick(Integer userId, Integer userRoomId) {
+        CustomUserDetail customUserDetail = (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = customUserDetail.getUser();
+        Optional<UserRoom> optionalUserRoom = userRoomRepository.findById(userRoomId);
+        if (optionalUserRoom.isPresent()){
+            UserRoom userRoom = optionalUserRoom.get();
+            if (userRoom.getRoom().getUser().getId() == user.getId()){
+                Optional<UserRoom> optionalKickedUserRoom = userRoomRepository.findUserRoomByUserIdAndRoomId(userId, userRoomId);
+                if (optionalUserRoom.isPresent()){
+                    userRoomRepository.delete(optionalKickedUserRoom.get());
+                    User kickedUser =  userService.getUserById(userId);
+                    KickRoomResponse kickRoomResponse = new KickRoomResponse();
+                    kickRoomResponse.setUserId(kickedUser.getId());
+                    kickRoomResponse.setUsername(kickedUser.getName());
+                    return kickRoomResponse;
+                }
+                else{
+                    throw new UserRoomNotFoundException(userRoomId);
+                }
+            }
+            else{
+                throw new UserIsInvalidException(userRoomId);
+            }
+        }
+        else {
+            throw new UserRoomNotFoundException(userRoomId);
+        }
     }
 }
