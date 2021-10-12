@@ -19,4 +19,7 @@ public class RoomResponse {
 
     @JsonProperty("userId")
     private Integer userId;
+
+    @JsonProperty("username")
+    private String username;
 }
